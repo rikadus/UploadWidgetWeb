@@ -18,7 +18,7 @@ export function UploadWidget() {
     <Collapsible.Root onOpenChange={() => toggleWidgetOpen()} asChild>
       <motion.div
         data-progress={isThereAnyPendingUploads}
-        className="bg-zinc-900 overflow-hidden w-[360px] rounded-xl data-[state=open]:shadow-shape border border-transparent animate-border data-[state=closed]:rounded-3xl data-[state=closed]:data-[progress=false]:shadow-shape  data-[state=closed]:data-[progress=true]:[background:linear-gradient(45deg,#09090B,theme(colors.zinc.900)_50%,#09090B)_padding-box,conic-gradient(from_var(--border-angle),theme(colors.zinc.700/.48)_80%,_theme(colors.indigo.500)_86%,_theme(colors.indigo.300)_90%,_theme(colors.indigo.500)_94%,_theme(colors.zinc.600/.48))_border-box]"
+        className="bg-zinc-900 overflow-hidden w-[500px] rounded-xl data-[state=open]:shadow-shape border border-transparent animate-border data-[state=closed]:rounded-3xl data-[state=closed]:data-[progress=false]:shadow-shape  data-[state=closed]:data-[progress=true]:[background:linear-gradient(45deg,#09090B,theme(colors.zinc.900)_50%,#09090B)_padding-box,conic-gradient(from_var(--border-angle),theme(colors.zinc.700/.48)_80%,_theme(colors.indigo.500)_86%,_theme(colors.indigo.300)_90%,_theme(colors.indigo.500)_94%,_theme(colors.zinc.600/.48))_border-box]"
         animate={isWidgetOpen ? "open" : "closed"}
         // Variantes de animação para os estados 'closed' e 'open'
         variants={{
@@ -30,7 +30,7 @@ export function UploadWidget() {
             },
           },
           open: {
-            width: 360,
+            width: 500,
             height: "auto",
             transition: {
               duration: 0.1,
@@ -54,5 +54,5 @@ export function UploadWidget() {
         </Collapsible.Content>
       </motion.div>
     </Collapsible.Root>
-  );
+  );  
 }
