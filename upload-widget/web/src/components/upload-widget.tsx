@@ -7,15 +7,20 @@ import { motion, useCycle } from "motion/react";
 import { usePendingUploads } from "../store/uploads";
 
 export function UploadWidget() {
+  // Verifica se há uploads pendentes para animar a borda ou mudar o estilo
   const { isThereAnyPendingUploads } = usePendingUploads();
+  
+  // Controla o estado de abertura/fechamento do widget
   const [isWidgetOpen, toggleWidgetOpen] = useCycle(false, true);
 
   return (
+    // Componente raiz do Collapsible, controlando o estado de abetura via onOpenChange
     <Collapsible.Root onOpenChange={() => toggleWidgetOpen()} asChild>
       <motion.div
         data-progress={isThereAnyPendingUploads}
         className="bg-zinc-900 overflow-hidden w-[360px] rounded-xl data-[state=open]:shadow-shape border border-transparent animate-border data-[state=closed]:rounded-3xl data-[state=closed]:data-[progress=false]:shadow-shape  data-[state=closed]:data-[progress=true]:[background:linear-gradient(45deg,#09090B,theme(colors.zinc.900)_50%,#09090B)_padding-box,conic-gradient(from_var(--border-angle),theme(colors.zinc.700/.48)_80%,_theme(colors.indigo.500)_86%,_theme(colors.indigo.300)_90%,_theme(colors.indigo.500)_94%,_theme(colors.zinc.600/.48))_border-box]"
         animate={isWidgetOpen ? "open" : "closed"}
+        // Variantes de animação para os estados 'closed' e 'open'
         variants={{
           closed: {
             width: "max-content",
@@ -33,6 +38,7 @@ export function UploadWidget() {
           },
         }}
       >
+        {/* Mostra o botão minimizado apenas se o widget estiver fechado */}
         {!isWidgetOpen && <UploadWidgetMinimizedButton />}
 
         <Collapsible.Content>
