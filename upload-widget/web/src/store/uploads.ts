@@ -28,6 +28,7 @@ enableMapSet();
 
 export const useUploads = create<UploadState, [["zustand/immer", never]]>(
   immer((set, get) => {
+    // Helper interno para atualizar o estado de um upload específico
     function updateUpload(uploadId: string, data: Partial<Upload>) {
       const upload = get().uploads.get(uploadId);
 
@@ -43,6 +44,7 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
       });
     }
 
+    // Função principal que processa o upload (compressão -> envio)
     async function processUpload(uploadId: string) {
       const upload = get().uploads.get(uploadId);
 
@@ -52,6 +54,7 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
 
       const abortController = new AbortController();
 
+      // Inicializa o upload, zerando progresso e URL anterior
       updateUpload(uploadId, {
         uploadSizeInBytes: 0,
         remoteUrl: undefined,
@@ -61,6 +64,7 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
       });
 
       try {
+        // Passo 1: Comprimir a imagem
         const compressedFile = await compressImage({
           file: upload.file,
           maxWidth: 1000,
@@ -70,6 +74,7 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
 
         updateUpload(uploadId, { compressedSizeInBytes: compressedFile.size });
 
+        // Passo 2: Enviar para o storage (com tracking de progresso)
         const { url } = await uploadFileToStorage(
           {
             file: compressedFile,
@@ -82,11 +87,13 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
           { signal: abortController.signal }
         );
 
+        // Sucesso: Atualiza status e salva URL
         updateUpload(uploadId, {
           status: "success",
           remoteUrl: url,
         });
       } catch (err) {
+        // Tratamento de cancelamento ou erro
         if (err instanceof CanceledError) {
           updateUpload(uploadId, {
             status: "canceled",
@@ -108,6 +115,7 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
         return;
       }
 
+      // Aborta a requisição HTTP (axios)
       upload.abortController?.abort();
 
       set((state) => {
@@ -134,10 +142,12 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
           uploadSizeInBytes: 0,
         };
 
+        // Adiciona à lista
         set((state) => {
           state.uploads.set(uploadId, upload);
         });
 
+        // Inicia o processamento
         processUpload(uploadId);
       }
     }
@@ -151,6 +161,7 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
   })
 );
 
+// Hook seletor otimizado para expor apenas dados agregados (progresso global)
 export const usePendingUploads = () => {
   return useUploads(
     useShallow((store) => {
