@@ -39,7 +39,7 @@ export const useUploads = create<UploadState, [["zustand/immer", never]]>(
       set((state) => {
         state.uploads.set(uploadId, {
           ...upload,
-          ...data,
+          ...data
         });
       });
     }
