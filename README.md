@@ -96,9 +96,9 @@ upload-widget/
 └── README.md     # Documentação Principal
 ```
 
----
+--
 
-Desenvolvido com 💜 por Ricardo Rodrigo
+Desenvolvido por Ricardo Rodrigo
 
 LinkedIn: https://www.linkedin.com/in/ricardorodrigues/ 
 GitHub: https://github.com/ricardorodrigues
